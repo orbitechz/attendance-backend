@@ -22,7 +22,7 @@ public class LessonService {
     public Lesson update(Lesson lesson, Long id) {
         Lesson lessonsaved = repository.findById(id).orElse(null);
         Assert.notNull(lessonsaved, "Lesson not found");
-        Assert.isTrue(!Objects.equals(lesson.getId(), id), "Lesson id mismatch");
+        //Assert.isTrue(!Objects.equals(lesson.getId(), id), "Lesson id mismatch");
         return repository.save(lesson);
     }
 

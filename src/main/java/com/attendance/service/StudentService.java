@@ -21,7 +21,7 @@ public class StudentService {
     public Student update(Student student, Long id){
         Student stud = repository.findById(id).orElse(null);
         Assert.isTrue(stud!=null, "Student not found");
-        Assert.isTrue(!Objects.equals(student.getId(), id), "Student id not found");
+        //Assert.isTrue(!Objects.equals(student.getId(), id), "Student id not found");
         repository.save(student);
         return student;
     }
