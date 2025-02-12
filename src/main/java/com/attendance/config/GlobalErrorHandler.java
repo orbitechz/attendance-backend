@@ -14,7 +14,7 @@ import java.nio.file.AccessDeniedException;
 import java.security.InvalidKeyException;
 import java.util.List;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalErrorHandler {
     /**
      * Erros de Service

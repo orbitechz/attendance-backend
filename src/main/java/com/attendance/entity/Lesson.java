@@ -20,6 +20,8 @@ public class Lesson {
 
     private LocalDateTime date;
 
+    private Boolean open;
+
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<Attendance> attendances;
 

@@ -2,13 +2,31 @@ package com.attendance.service;
 
 import com.attendance.entity.Student;
 import com.attendance.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import java.util.Objects;
 
 @Service
 public class StudentService {
 
-    public Student create(Student student){
+    @Autowired
+    private StudentRepository repository;
 
+    public Student create(Student student){
+        return repository.save(student);
+    }
+
+    public Student update(Student student, Long id){
+        Student stud = repository.findById(id).orElse(null);
+        Assert.isTrue(stud!=null, "Student not found");
+        Assert.isTrue(!Objects.equals(student.getId(), id), "Student id not found");
+        repository.save(student);
         return student;
+    }
+
+    public void delete(Long id){
+        repository.deleteById(id);
     }
 }

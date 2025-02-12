@@ -5,6 +5,7 @@ import com.attendance.repository.StudentRepository;
 import com.attendance.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +31,19 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Validated @RequestBody Student student) {
         return ResponseEntity.ok(service.create(student));
+    }
+
+    @PutMapping("/students/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @Validated @RequestBody Student student) {
+        return ResponseEntity.ok(service.update(student, id));
+    }
+
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 }
