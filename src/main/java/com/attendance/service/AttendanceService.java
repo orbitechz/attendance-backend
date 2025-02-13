@@ -4,18 +4,23 @@ import com.attendance.entity.Attendance;
 import com.attendance.entity.Lesson;
 import com.attendance.entity.Student;
 import com.attendance.repository.AttendanceRepository;
+import com.attendance.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class AttendanceService {
 
     @Autowired
     private AttendanceRepository repository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private StudentService studentService;
@@ -43,9 +48,12 @@ public class AttendanceService {
     }
 
     public Attendance create(Attendance attendance) {
+        if (attendance.getStudent() != null && attendance.getStudent().getRa() != null) {
+            Optional<Long> studentId = studentRepository.getByRa(attendance.getStudent().getRa());
+            studentId.ifPresent(id -> attendance.getStudent().setId(id));
+        }
         return repository.save(attendance);
     }
-
     public Attendance update(Attendance attendance, Long id) {
         Attendance attendanceSaved = repository.findById(id).orElse(null);
         Assert.isTrue(!Objects.equals(attendance.getId(), id), "Attedance id mismatch");

@@ -25,6 +25,12 @@ public class LessonController {
         return ResponseEntity.ok(service.getAll());
     }
 
+    @GetMapping("/open")
+    public ResponseEntity<List<Lesson>> getOpenLessons() {
+        List<Lesson> openLessons = repository.findByOpenTrue();
+        return ResponseEntity.ok(openLessons);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Lesson> getLesson(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
@@ -38,6 +44,17 @@ public class LessonController {
     @PutMapping("/{id}")
     public ResponseEntity<Lesson> updateLesson(@Validated @RequestBody Lesson lesson,@PathVariable Long id) {
         return ResponseEntity.ok(service.update(lesson, id));
+    }
+
+    @PutMapping("/close/{id}")
+    public ResponseEntity<Lesson> closeLesson(@PathVariable Long id) {
+        Lesson lesson = repository.findById(id).orElse(null);
+        if (lesson == null) {
+            return ResponseEntity.notFound().build();
+        }
+        lesson.setOpen(false);
+        repository.save(lesson);
+        return ResponseEntity.ok(lesson);
     }
 
     @DeleteMapping("/{id}")

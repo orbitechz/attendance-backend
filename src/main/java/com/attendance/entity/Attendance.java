@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-//@Getter @Setter
+@Getter @Setter
 //@AllArgsConstructor
 //@NoArgsConstructor
 public class Attendance {
