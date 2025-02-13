@@ -17,7 +17,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 5, max = 50)
+    @Size(min = 2, max = 50)
     private String name;
 
     @Email

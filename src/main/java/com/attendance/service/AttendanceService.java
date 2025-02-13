@@ -49,7 +49,7 @@ public class AttendanceService {
 
     public Attendance create(Attendance attendance) {
         if (attendance.getStudent() != null && attendance.getStudent().getRa() != null) {
-            Optional<Long> studentId = studentRepository.getByRa(attendance.getStudent().getRa());
+            Optional<Long> studentId = studentRepository.getByRa(attendance.getStudent().getRa()).stream().findFirst();
             studentId.ifPresent(id -> attendance.getStudent().setId(id));
         }
         return repository.save(attendance);
