@@ -1,10 +1,13 @@
 package com.attendance.service;
 
+import com.attendance.dto.AttendanceDTO;
 import com.attendance.entity.Attendance;
 import com.attendance.entity.Lesson;
 import com.attendance.entity.Student;
+import com.attendance.mapper.AttendanceDTOMapper;
 import com.attendance.repository.AttendanceRepository;
 import com.attendance.repository.StudentRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -14,19 +17,23 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AttendanceService {
 
-    @Autowired
-    private AttendanceRepository repository;
+    private final AttendanceRepository repository;
 
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
 
-    @Autowired
-    private LessonService lessonService;
+    private final LessonService lessonService;
+
+    private final AttendanceDTOMapper attendanceDTOMapper;
+
+    public AttendanceDTO convertAttendanceDTO(Attendance attendance){
+        if (attendance == null) return null;
+        return attendanceDTOMapper.convert(attendance);
+    }
 
     public List<Attendance> getAll() {
         return repository.findAll();

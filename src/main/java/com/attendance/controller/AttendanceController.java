@@ -1,5 +1,6 @@
 package com.attendance.controller;
 
+import com.attendance.dto.AttendanceDTO;
 import com.attendance.entity.Attendance;
 import com.attendance.repository.AttendanceRepository;
 import com.attendance.service.AttendanceService;
@@ -20,8 +21,9 @@ public class AttendanceController {
     private AttendanceRepository repository;
 
     @GetMapping
-    public ResponseEntity<List<Attendance>> findAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<AttendanceDTO>> findAll() {
+        List<Attendance> attendances = service.getAll();
+        return ResponseEntity.ok(attendances.stream().map(service::convertAttendanceDTO).toList());
     }
 
     @GetMapping("/{id}")
@@ -35,8 +37,9 @@ public class AttendanceController {
     }
 
     @GetMapping("/lesson/{id}")
-    public ResponseEntity<List<Attendance>> findByLessonId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getByLesson(id));
+    public ResponseEntity<List<AttendanceDTO>> findByLessonId(@PathVariable Long id) {
+        List<Attendance> attendances = service.getByLesson(id);
+        return ResponseEntity.ok(attendances.stream().map(service::convertAttendanceDTO).toList());
     }
 
 

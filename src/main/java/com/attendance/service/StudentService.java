@@ -1,5 +1,6 @@
 package com.attendance.service;
 
+import com.attendance.dto.StudentDTO;
 import com.attendance.entity.Student;
 import com.attendance.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
