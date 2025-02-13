@@ -1,5 +1,6 @@
 package com.attendance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class Lesson {
     private Boolean open;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Attendance> attendances;
 
     public Lesson(Long id, String title, LocalDateTime date, Boolean open) {
