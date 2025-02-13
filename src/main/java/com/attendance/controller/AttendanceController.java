@@ -34,6 +34,11 @@ public class AttendanceController {
         return ResponseEntity.ok(service.getByStudend(id));
     }
 
+    @GetMapping("/lesson/{id}")
+    public ResponseEntity<List<Attendance>> findByLessonId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getByLesson(id));
+    }
+
 
     @PostMapping
     public ResponseEntity<Attendance> createAttendance(@RequestBody Attendance attendance) {

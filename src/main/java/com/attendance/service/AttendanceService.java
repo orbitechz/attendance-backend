@@ -1,6 +1,7 @@
 package com.attendance.service;
 
 import com.attendance.entity.Attendance;
+import com.attendance.entity.Lesson;
 import com.attendance.entity.Student;
 import com.attendance.repository.AttendanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class AttendanceService {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private LessonService lessonService;
+
     public List<Attendance> getAll() {
         return repository.findAll();
     }
@@ -30,6 +34,12 @@ public class AttendanceService {
     public List<Attendance> getByStudend(Long id) {
         Student student = studentService.getById(id);
         return repository.findByStudent(student);
+    }
+
+    public List<Attendance> getByLesson(Long id){
+        Lesson lesson = lessonService.getById(id);
+        return repository.findByLesson(lesson);
+
     }
 
     public Attendance create(Attendance attendance) {

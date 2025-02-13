@@ -32,6 +32,7 @@ public class Student {
     private String ra;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Attendance> attendances;
 
     public Student(Long id, String name, String email, String ra, List<Attendance> attendances) {
