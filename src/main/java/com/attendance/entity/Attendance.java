@@ -24,10 +24,13 @@ public class Attendance {
     @JoinColumn(name = "lesson_id", nullable = false)
     private Lesson lesson;
 
-    public Attendance(Long id, Student student, Lesson lesson) {
+    private Boolean open;
+
+    public Attendance(Long id, Student student, Lesson lesson, boolean open) {
         this.id = id;
         this.student = student;
         this.lesson = lesson;
+        this.open = open;
     }
     public Attendance() {}
 
@@ -37,6 +40,14 @@ public class Attendance {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getOpen() {
+        return open;
+    }
+
+    public void setOpen(Boolean open) {
+        this.open = open;
     }
 
     public Student getStudent() {

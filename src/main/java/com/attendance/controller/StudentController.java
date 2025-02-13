@@ -22,12 +22,12 @@ public class StudentController {
 
     @GetMapping()
     public ResponseEntity<List<Student>> getAllStudent() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        return ResponseEntity.ok(repository.findById(id).orElse(null));
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping()

@@ -22,12 +22,12 @@ public class LessonController {
 
     @GetMapping()
     public ResponseEntity<List<Lesson>> getLessons() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Lesson> getLesson(@PathVariable Long id) {
-        return ResponseEntity.ok(repository.findById(id).orElse(null));
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping()
