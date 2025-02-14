@@ -36,7 +36,7 @@ public class AttendanceService {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Attendance> getByStudend(Long id) {
+    public List<Attendance> getByStudent(Long id) {
         Student student = studentService.getById(id);
         return repository.findByStudent(student);
     }
@@ -44,7 +44,6 @@ public class AttendanceService {
     public List<Attendance> getByLesson(Long id){
         Lesson lesson = lessonService.getById(id);
         return repository.findByLesson(lesson);
-
     }
 
     public Attendance create(Attendance attendance) {
@@ -54,9 +53,10 @@ public class AttendanceService {
         }
         return repository.save(attendance);
     }
+
     public Attendance update(Attendance attendance, Long id) {
         Attendance attendanceSaved = repository.findById(id).orElse(null);
-        Assert.isTrue(!Objects.equals(attendance.getId(), id), "Attedance id mismatch");
+        Assert.isTrue(Objects.equals(attendance.getId(), id), "Attedance id mismatch");
         Assert.notNull(attendanceSaved, "Attendance not found");
         return repository.save(attendance);
     }

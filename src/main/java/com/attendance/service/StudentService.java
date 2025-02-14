@@ -23,13 +23,11 @@ public class StudentService {
         return repository.findAll();
     }
 
-    public Student create(Student student){
-        return repository.save(student);
-    }
+    public Student create(Student student){ return repository.save(student); }
 
     public Student update(Student student, Long id){
-        Student stud = repository.findById(id).orElse(null);
-        Assert.notNull(stud, "Student not found");
+        Student foundStudent = repository.findById(id).orElse(null);
+        Assert.notNull(foundStudent, "Student not found");
         Assert.isTrue(Objects.equals(student.getId(), id), "Student id not found");
         repository.save(student);
         return student;
@@ -38,4 +36,5 @@ public class StudentService {
     public void delete(Long id){
         repository.deleteById(id);
     }
+
 }
