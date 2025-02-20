@@ -11,11 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class Student {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Student extends User{
 
     @Size(min = 2, max = 50)
     private String name;
@@ -29,53 +25,4 @@ public class Student {
     @JsonIgnore
     private List<Attendance> attendances;
 
-    public Student(Long id, String name, String email, String ra, List<Attendance> attendances) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.ra = ra;
-        this.attendances = attendances;
-    }
-
-    public Student() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public @Size(min = 5, max = 50) String getName() {
-        return name;
-    }
-
-    public void setName(@Size(min = 5, max = 50) String name) {
-        this.name = name;
-    }
-
-    public @Email String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@Email String email) {
-        this.email = email;
-    }
-
-    public String getRa() {
-        return ra;
-    }
-
-    public void setRa(String ra) {
-        this.ra = ra;
-    }
-
-    public List<Attendance> getAttendances() {
-        return attendances;
-    }
-
-    public void setAttendances(List<Attendance> attendances) {
-        this.attendances = attendances;
-    }
 }

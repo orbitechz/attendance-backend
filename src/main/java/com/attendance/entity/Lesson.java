@@ -27,6 +27,9 @@ public class Lesson {
     @JsonIgnore
     private List<Attendance> attendances;
 
+    @ManyToOne
+    private Professor professor;
+
     public Lesson(Long id, String title, LocalDateTime date, Boolean open) {
         this.id = id;
         this.title = title;

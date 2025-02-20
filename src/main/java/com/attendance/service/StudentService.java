@@ -23,7 +23,8 @@ public class StudentService {
         return repository.findAll();
     }
 
-    public Student create(Student student){ return repository.save(student); }
+    public Student create(Student student){
+        return repository.save(student); }
 
     public Student update(Student student, Long id){
         Student foundStudent = repository.findById(id).orElse(null);
