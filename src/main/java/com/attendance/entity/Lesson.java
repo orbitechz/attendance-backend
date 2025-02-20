@@ -9,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Lesson {
 
     @Id
@@ -28,46 +28,6 @@ public class Lesson {
     private List<Attendance> attendances;
 
     @ManyToOne
+    @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
-
-    public Lesson(Long id, String title, LocalDateTime date, Boolean open) {
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.open = open;
-    }
-
-    public Lesson() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public Boolean getOpen() {
-        return open;
-    }
-
-    public void setOpen(Boolean open) {
-        this.open = open;
-    }
 }
