@@ -33,6 +33,7 @@ public class Lesson {
         this.date = date;
         this.open = open;
     }
+
     public Lesson() {}
 
     public Long getId() {

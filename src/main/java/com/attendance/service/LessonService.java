@@ -28,8 +28,8 @@ public class LessonService {
     }
 
     public Lesson update(Lesson lesson, Long id) {
-        Lesson lessonsaved = repository.findById(id).orElse(null);
-        Assert.notNull(lessonsaved, "Lesson not found");
+        Lesson foundLesson = repository.findById(id).orElse(null);
+        Assert.notNull(foundLesson, "Lesson not found");
         Assert.isTrue(Objects.equals(lesson.getId(), id), "Lesson id mismatch");
         return repository.save(lesson);
     }
@@ -37,4 +37,5 @@ public class LessonService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
 }

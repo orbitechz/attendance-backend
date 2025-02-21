@@ -32,6 +32,7 @@ public class Attendance {
         this.lesson = lesson;
         this.open = open;
     }
+
     public Attendance() {}
 
     public Long getId() {
