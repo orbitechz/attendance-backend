@@ -84,6 +84,7 @@
         <artifactId>junit-jupiter-engine</artifactId>
 				<scope>test</scope>
 		</dependency>
+<<<<<<< HEAD
 		    <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-junit-jupiter</artifactId>
@@ -172,6 +173,8 @@
 
 
 
+=======
+>>>>>>> efeb8765dcb5dc708b04245cbf5d1dcbf6219c4a
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
