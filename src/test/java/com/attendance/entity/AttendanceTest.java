@@ -55,7 +55,7 @@ public class AttendanceTest {
     }
 
     @Test
-    public void testSetOpen() {
+    public void testSetOpen() { 
         attendance.setOpen(false);
         assertFalse(attendance.getOpen());
         
