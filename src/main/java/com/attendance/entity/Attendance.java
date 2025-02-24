@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Attendance {
 
     @Id
@@ -26,44 +26,4 @@ public class Attendance {
 
     private Boolean open;
 
-    public Attendance(Long id, Student student, Lesson lesson, boolean open) {
-        this.id = id;
-        this.student = student;
-        this.lesson = lesson;
-        this.open = open;
-    }
-
-    public Attendance() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Boolean getOpen() {
-        return open;
-    }
-
-    public void setOpen(Boolean open) {
-        this.open = open;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Lesson getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
-    }
 }
