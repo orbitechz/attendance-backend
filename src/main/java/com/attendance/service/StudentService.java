@@ -3,6 +3,7 @@ package com.attendance.service;
 import com.attendance.entity.Student;
 import com.attendance.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -14,6 +15,8 @@ public class StudentService {
 
     @Autowired
     private StudentRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Student getById(Long id) {
         return repository.findById(id).orElse(null);
@@ -23,7 +26,10 @@ public class StudentService {
         return repository.findAll();
     }
 
-    public Student create(Student student){ return repository.save(student); }
+    public Student create(Student student){
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
+
+        return repository.save(student); }
 
     public Student update(Student student, Long id){
         Student foundStudent = repository.findById(id).orElse(null);
