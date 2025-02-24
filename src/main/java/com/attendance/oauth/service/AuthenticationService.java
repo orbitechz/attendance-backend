@@ -79,6 +79,7 @@ public class AuthenticationService {
             );
             user = repository.findByUsername(request.getUsername())
                     .orElseThrow();
+
         }else if (request.getEmail() != null){
             User userSaved;
             Student student = studentRepository.findByEmail(request.getEmail())
@@ -92,6 +93,12 @@ public class AuthenticationService {
                 userSaved = student;
             }
 
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userSaved.getUsername(),
+                            request.getPassword()
+                    )
+            );
 
             user = userSaved;
 //            user.setId(userSaved.getId());
