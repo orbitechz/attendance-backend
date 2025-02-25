@@ -20,9 +20,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -38,10 +38,22 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
-        var user = User.builder()
-                .username(request.getUsername())
-                .password(encodedPassword)
-                .build();
+        User user;
+        if (Optional.ofNullable(request.getRa()).isPresent()) {
+            user = Student.builder()
+                    .username(request.getUsername())
+                    .ra(request.getRa())
+                    .role(User.Role.STUDENT)
+                    .password(encodedPassword)
+                    .build();
+        } else {
+            user = User.builder()
+                    .username(request.getUsername())
+                    .role(User.Role.PROFESSOR)
+                    .password(encodedPassword)
+                    .build();
+        }
+
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
