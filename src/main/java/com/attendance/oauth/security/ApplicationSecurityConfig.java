@@ -26,9 +26,6 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class ApplicationSecurityConfig {
 
-    private static final String[] WHITE_LIST_URL = {
-            "/attendance/api/auth/**"
-    };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
