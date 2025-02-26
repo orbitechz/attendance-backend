@@ -29,5 +29,6 @@ public class Lesson {
 
     @ManyToOne
     @JoinColumn(name = "professor_id", nullable = false)
+    @JsonIgnore
     private Professor professor;
 }
