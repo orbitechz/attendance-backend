@@ -2,6 +2,7 @@ package com.attendance.service;
 
 import com.attendance.entity.Attendance;
 import com.attendance.entity.Lesson;
+import com.attendance.entity.Professor;
 import com.attendance.entity.Student;
 import com.attendance.repository.AttendanceRepository;
 import com.attendance.repository.StudentRepository;
@@ -14,10 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -49,8 +47,8 @@ class AttendanceServiceTest {
         MockitoAnnotations.openMocks(this);
 
         List<Attendance> studentAttendances = new ArrayList<>();
-        student = new Student(1L, "nome", "email", "123456", studentAttendances);
-        Lesson lesson = new Lesson(1L, "title", LocalDateTime.now(), true);
+        student = new Student(1L, "nome", "email", new Date(), studentAttendances);
+        Lesson lesson = new Lesson(1L, "title", LocalDateTime.now(), true, null, new Professor());
 
         attendance1 = new Attendance(1L, student, lesson, true);
         attendance2 = new Attendance(2L, student, lesson, true);
@@ -90,7 +88,7 @@ class AttendanceServiceTest {
 
     @Test
     void testGetByStudent() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        when(studentService.getById(1L)).thenReturn(student);
 
         when(attendanceRepository.findByStudent(student)).thenReturn(Arrays.asList(attendance1, attendance2));
 

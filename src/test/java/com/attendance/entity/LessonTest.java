@@ -31,7 +31,7 @@ public class LessonTest {
     @Test
     public void testLessonParameterizedConstructor() {
         LocalDateTime now = LocalDateTime.now();
-        lesson = new Lesson(1L, "Math", now, true);
+        lesson = new Lesson(1L, "Math", now, true, null, new Professor());
 
         assertEquals(1L, lesson.getId());
         assertEquals("Math", lesson.getTitle());
