@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +20,7 @@ public class StudentTest {
   public void setUp(){
     MockitoAnnotations.openMocks(this);
     List<Attendance> attendances = new ArrayList<>();
-    student = new Student(1l, "Guilherme Santos", "guilherme.santos@exemple.com", "987654", attendances
+    student = new Student(1l, "Guilherme Santos", "guilherme.santos@exemple.com", new Date(), attendances
     );
   }
 
@@ -29,7 +30,6 @@ public class StudentTest {
     assertEquals(1L, student.getId());
     assertEquals("Guilherme Santos", student.getName());
     assertEquals("guilherme.santos@exemple.com", student.getEmail());
-    assertEquals("987654", student.getRa());
     assertNotNull(student.getAttendances());
     assertEquals(0, student.getAttendances().size());
   }
