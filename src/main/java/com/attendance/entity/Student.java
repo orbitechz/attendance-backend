@@ -28,8 +28,6 @@ public class Student extends User {
     @Email
     private String email;
 
-    private String ra;
-
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 

@@ -66,10 +66,10 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        User user = new User();
+        User user;
         if(request.getRa() != null){
 
-            Student student = studentRepository.findByRa(request.getRa())
+            User student = repository.findByRa(request.getRa())
                     .orElseThrow(() -> new RuntimeException("Student not found"));
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -78,11 +78,8 @@ public class AuthenticationService {
                     )
             );
 
-            user.setId(student.getId());
-            user.setUsername(student.getRa());
-            user.setPassword(student.getPassword());
-            user.setRole(student.getRole());
-        }else if(request.getUsername() != null){
+            user = student;
+        }else{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(),
@@ -92,34 +89,8 @@ public class AuthenticationService {
             user = repository.findByUsername(request.getUsername())
                     .orElseThrow();
 
-        }else if (request.getEmail() != null){
-            User userSaved;
-            Student student = studentRepository.findByEmail(request.getEmail())
-                    .orElse(null);
-
-            if(student == null){
-                Professor professor = professorRepository.findByEmail(request.getEmail())
-                        .orElse(null);
-                userSaved = professor;
-            }else{
-                userSaved = student;
-            }
-
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            userSaved.getUsername(),
-                            request.getPassword()
-                    )
-            );
-
-            user = userSaved;
-//            user.setId(userSaved.getId());
-//            user.setUsername(userSaved.getUsername());
-//            user.setPassword(userSaved.getPassword());
-//            user.setRole(userSaved.getRole());
         }
 
-        Student student;
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
