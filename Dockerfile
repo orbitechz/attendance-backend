@@ -1,12 +1,12 @@
 # FASE DE BUILD
-FROM maven:3.9.3-eclipse-temurin-17 AS build-maven
+FROM maven:3.9.3-eclipse-temurin-17 AS build
 WORKDIR /opt
-COPY src .
 COPY pom.xml .
-RUN mvn -f ./pom.xml clean package -DskipTests
+COPY . .
+RUN mvn -e -f ./pom.xml clean package -DskipTests
 
 # FASE DE RUNNER
-FROM openjdk:17-jdk as runner
+FROM openjdk:17-jdk AS runner
 WORKDIR /opt
 COPY --from=build /opt/target/*.jar ./attendance-api.jar
 EXPOSE 8080
