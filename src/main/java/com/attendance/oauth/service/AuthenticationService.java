@@ -1,5 +1,13 @@
 package com.attendance.oauth.service;
-import com.attendance.entity.Professor;
+import java.io.IOException;
+import java.util.Optional;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.attendance.entity.Student;
 import com.attendance.entity.User;
 import com.attendance.oauth.jwt.JwtService;
@@ -12,17 +20,10 @@ import com.attendance.repository.ProfessorRepository;
 import com.attendance.repository.StudentRepository;
 import com.attendance.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
