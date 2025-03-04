@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
-    branches:
-      - main
-jobs:
-  build:
-    runs-on: ubuntu-latest
+    branches: ["*"]
 
+jobs:
+  test:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
@@ -22,8 +22,52 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Permissão para executar o maven wrapper
+      - name: Permissão para executar o Maven Wrapper
         run: chmod +x ./mvnw
 
       - name: Build e testes com Maven
         run: ./mvnw clean verify
+
+  build-and-push-develop:
+    needs: test
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Login no GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build e Push da imagem Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:develop
+
+  build-and-push-main:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Login no GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build e Push da imagem Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
