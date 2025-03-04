@@ -22,5 +22,8 @@ jobs:
           java-version: 17
           cache: maven
 
+      - name: Permissão para executar o maven wrapper
+        run: chmod +x ./mvnw
+
       - name: Build e testes com Maven
         run: ./mvnw clean verify
