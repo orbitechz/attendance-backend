@@ -1,11 +1,15 @@
 package com.attendance.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Attendance {
 
     @Id
@@ -19,5 +23,7 @@ public class Attendance {
     @ManyToOne
     @JoinColumn(name = "lesson_id", nullable = false)
     private Lesson lesson;
+
+    private Boolean open;
 
 }

@@ -1,15 +1,16 @@
 package com.attendance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Lesson {
 
     @Id
@@ -20,7 +21,14 @@ public class Lesson {
 
     private LocalDateTime date;
 
+    private Boolean open;
+
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Attendance> attendances;
 
+    @ManyToOne
+    @JoinColumn(name = "professor_id", nullable = false)
+    @JsonIgnore
+    private Professor professor;
 }
