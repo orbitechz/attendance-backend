@@ -45,10 +45,21 @@ public class LessonService {
         return repository.save(lesson);
     }
 
-    public Lesson update(Lesson lesson, Long id) {
+    public Lesson update(Lesson lesson, Long id, Principal principal) {
         Lesson foundLesson = repository.findById(id).orElse(null);
         Assert.notNull(foundLesson, "Lesson not found");
         Assert.isTrue(Objects.equals(lesson.getId(), id), "Lesson id mismatch");
+
+
+        User user = userRepository.findByUsername(principal.getName()).orElse(null);
+
+        Assert.isTrue(user != null, "User not found");
+
+        Assert.isTrue(user.getRole() == User.Role.PROFESSOR, "User is not professor");
+
+        Professor professor = professorService.getById(user.getId());
+
+        lesson.setProfessor(professor);
         return repository.save(lesson);
     }
 
