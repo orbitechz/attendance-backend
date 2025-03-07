@@ -10,11 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,6 +24,9 @@ public class StudentServiceTest {
 
     @Mock
     private StudentRepository studentRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private StudentService studentService;
@@ -38,8 +40,10 @@ public class StudentServiceTest {
 
         List<Attendance> studentAttendances = new ArrayList<>();
 
-        student1 = new Student(1L, "name1", "email", "12345", studentAttendances);
-        student2 = new Student(2L, "name2", "email", "54321", studentAttendances);
+        Date dataNascimento = new Date();
+
+        student1 = new Student(1L, "name1", "email", dataNascimento, studentAttendances);
+        student2 = new Student(2L, "name2", "email", dataNascimento, studentAttendances);
     }
 
     @Test
@@ -66,29 +70,34 @@ public class StudentServiceTest {
     }
 
     @Test
-    void testCreate() {
-        when(studentRepository.save(any(Student.class))).thenReturn(student1);
+    void create() {
+        student1.setPassword("password");
+        String encodedPassword = "encodedPassword";
+        when(passwordEncoder.encode("password")).thenReturn(encodedPassword);
+        when(studentRepository.save(any(Student.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Student createdStudent = studentService.create(student1);
 
         assertNotNull(createdStudent);
-        assertEquals(student1.getId(), createdStudent.getId());
+        assertEquals(encodedPassword, createdStudent.getPassword(), "A senha não foi codificada corretamente.");
 
-        verify(studentRepository, times(1)).save(any(Student.class));
+        verify(passwordEncoder, times(1)).encode("password");
+        verify(studentRepository, times(1)).save(student1);
     }
 
     @Test
     void testUpdate() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student1));
-        when(studentRepository.save(any(Student.class))).thenReturn(student1);
-
         Student updatedStudent = new Student();
         updatedStudent.setId(1L);
-        updatedStudent.setName("Updated name1");
+        updatedStudent.setName("novo name1");
+
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student1));
+        when(studentRepository.save(any(Student.class))).thenReturn(updatedStudent);
 
         Student result = studentService.update(updatedStudent, 1L);
 
         assertNotNull(result);
+        assertEquals("novo name1", result.getName());
         assertEquals(updatedStudent.getId(), result.getId());
 
         verify(studentRepository, times(1)).findById(1L);

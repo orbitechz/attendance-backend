@@ -2,6 +2,7 @@ package com.attendance.service;
 
 import com.attendance.entity.Attendance;
 import com.attendance.entity.Lesson;
+import com.attendance.entity.Professor;
 import com.attendance.entity.Student;
 import com.attendance.repository.AttendanceRepository;
 import com.attendance.repository.StudentRepository;
@@ -14,10 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -50,8 +48,8 @@ class AttendanceServiceTest {
         MockitoAnnotations.openMocks(this);
 
         List<Attendance> studentAttendances = new ArrayList<>();
-        student = new Student(1L, "name", "email", "123456", studentAttendances);
-        lesson = new Lesson(1L, "title", LocalDateTime.now(), true);
+        student = new Student(1L, "nome", "email", new Date(), studentAttendances);
+        lesson = new Lesson(1L, "title", LocalDateTime.now(), true, null, new Professor());
 
         attendance1 = new Attendance(1L, student, lesson, true);
         attendance2 = new Attendance(2L, student, lesson, true);
@@ -108,6 +106,7 @@ class AttendanceServiceTest {
 
     @Test
     void testCreate() {
+        student.setRa("12345");
         when(studentRepository.getByRa(any())).thenReturn(Arrays.asList(student.getId()));
         when(attendanceRepository.save(any())).thenReturn(attendance1);
 
@@ -122,15 +121,17 @@ class AttendanceServiceTest {
 
     @Test
     void testUpdate() {
-        when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1));
-        when(attendanceRepository.save(any())).thenReturn(attendance1);
-
         Attendance updatedAttendance = new Attendance();
         updatedAttendance.setId(1L);
+        updatedAttendance.setOpen(false);
+
+        when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1));
+        when(attendanceRepository.save(any())).thenReturn(updatedAttendance);
 
         Attendance result = attendanceService.update(updatedAttendance, 1L);
 
         assertNotNull(result);
+        assertEquals(updatedAttendance.getOpen(), result.getOpen());
         assertEquals(updatedAttendance.getId(), result.getId());
 
         verify(attendanceRepository, times(1)).findById(1L);
@@ -139,10 +140,12 @@ class AttendanceServiceTest {
 
     @Test
     void testDelete() {
-        when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1));
+        when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1)).thenReturn(Optional.empty());
 
         attendanceService.delete(1L);
 
+        verify(attendanceRepository, times(1)).findById(1L);
         verify(attendanceRepository, times(1)).deleteById(1L);
     }
+
 }

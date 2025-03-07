@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class LessonController {
     private LessonRepository repository;
 
     @GetMapping()
-    public ResponseEntity<List<Lesson>> getLessons() {
+    public ResponseEntity< List<Lesson>> getLessons() {
         return ResponseEntity.ok(service.getAll());
     }
 
@@ -37,8 +38,8 @@ public class LessonController {
     }
 
     @PostMapping()
-    public ResponseEntity<Lesson> createLesson(@Validated @RequestBody Lesson lesson) {
-        return ResponseEntity.ok(service.create(lesson));
+    public ResponseEntity<Lesson> createLesson(Principal principal, @Validated @RequestBody Lesson lesson) {
+        return ResponseEntity.ok(service.create(lesson, principal));
     }
 
     @PutMapping("/{id}")
