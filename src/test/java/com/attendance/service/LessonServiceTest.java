@@ -105,14 +105,18 @@ class LessonServiceTest {
 
     @Test
     void testUpdate() {
+        when(principal.getName()).thenReturn("professor");
+        when(userRepository.findByUsername("professor")).thenReturn(Optional.of(professorUser));
+        when(professorService.getById(professorUser.getId())).thenReturn(professor);
+        when(lessonRepository.findById(1L)).thenReturn(Optional.of(lesson1));
+
         Lesson updatedLesson = new Lesson();
         updatedLesson.setId(1L);
         updatedLesson.setTitle("novo titulo");
 
-        when(lessonRepository.findById(1L)).thenReturn(Optional.of(lesson1));
-        when(lessonRepository.save(any(Lesson.class))).thenReturn(updatedLesson);;
+        when(lessonRepository.save(any(Lesson.class))).thenReturn(updatedLesson);
 
-        Lesson result = lessonService.update(updatedLesson, 1L);
+        Lesson result = lessonService.update(updatedLesson, 1L, principal);
 
         assertNotNull(result);
         assertEquals("novo titulo", result.getTitle());
@@ -120,6 +124,8 @@ class LessonServiceTest {
 
         verify(lessonRepository, times(1)).findById(1L);
         verify(lessonRepository, times(1)).save(updatedLesson);
+        verify(userRepository, times(1)).findByUsername("professor");
+        verify(professorService, times(1)).getById(professorUser.getId());
     }
 
     @Test

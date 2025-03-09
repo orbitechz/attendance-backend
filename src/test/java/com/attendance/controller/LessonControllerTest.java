@@ -97,13 +97,13 @@ class LessonControllerTest {
     void testUpdateLesson() {
         Long id = 1L;
         Lesson lesson = new Lesson();
-        when(service.update(lesson, id)).thenReturn(lesson);
+        when(service.update(lesson, id, principal)).thenReturn(lesson);
 
-        ResponseEntity<Lesson> response = controller.updateLesson(lesson, id);
+        ResponseEntity<Lesson> response = controller.updateLesson(principal, lesson, id);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertEquals(lesson, response.getBody());
-        verify(service, times(1)).update(lesson, id);
+        verify(service, times(1)).update(lesson, id, principal);
     }
 
     @Test
