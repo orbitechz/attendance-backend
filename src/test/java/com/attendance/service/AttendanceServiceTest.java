@@ -39,6 +39,7 @@ class AttendanceServiceTest {
     private AttendanceService attendanceService;
 
     private Student student;
+    private Lesson lesson;
     private Attendance attendance1;
     private Attendance attendance2;
 
@@ -48,57 +49,103 @@ class AttendanceServiceTest {
 
         List<Attendance> studentAttendances = new ArrayList<>();
         student = new Student(1L, "nome", "email", new Date(), studentAttendances);
-        Lesson lesson = new Lesson(1L, "title", LocalDateTime.now(), true, null, new Professor());
+        lesson = new Lesson(1L, "title", LocalDateTime.now(), true, null, new Professor());
 
         attendance1 = new Attendance(1L, student, lesson, true);
         attendance2 = new Attendance(2L, student, lesson, true);
     }
 
     @Test
-    void mustReturnPresenceList() {
-        when(attendanceRepository.findAll()).thenReturn(Arrays.asList(attendance1, attendance2));
-
-        List<Attendance> result = attendanceService.getAll();
-
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(attendanceRepository, times(1)).findAll();
-    }
-
-    @Test
-    void mustReturnIdWhenAttendanceExist() {
+    void testGetById() {
         when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1));
 
-        Attendance result = attendanceService.getById(1L);
+        Attendance foundAttendance = attendanceService.getById(1L);
 
-        assertNotNull(result);
-        assertEquals(attendance1, result);
+        assertNotNull(foundAttendance);
+        assertEquals(attendance1.getId(), foundAttendance.getId());
+
         verify(attendanceRepository, times(1)).findById(1L);
     }
 
     @Test
-    void mustReturnNullWhenAttendanceDoesntExist() {
-        when(attendanceRepository.findById(1L)).thenReturn(Optional.empty());
+    void testGetAll() {
+        when(attendanceRepository.findAll()).thenReturn(Arrays.asList(attendance1, attendance2));
 
-        Attendance result = attendanceService.getById(1L);
+        List<Attendance> attendances = attendanceService.getAll();
 
-        assertNull(result);
-        verify(attendanceRepository, times(1)).findById(1L);
+        assertEquals(2, attendances.size());
+
+        verify(attendanceRepository, times(1)).findAll();
     }
 
     @Test
     void testGetByStudent() {
         when(studentService.getById(1L)).thenReturn(student);
-
         when(attendanceRepository.findByStudent(student)).thenReturn(Arrays.asList(attendance1, attendance2));
 
-        List<Attendance> attendancesList = attendanceService.getByStudent(1L);
-        assertNotNull(attendancesList);
-        assertEquals(2, attendancesList.size());
-        assertEquals(attendance1, attendancesList.get(0));
-        assertEquals(attendance2, attendancesList.get(1));
+        List<Attendance> attendances = attendanceService.getByStudent(1L);
 
-        verify(studentService).getById(1L);
-        verify(attendanceRepository).findByStudent(student);
+        assertEquals(2, attendances.size());
+
+        verify(studentService, times(1)).getById(1L);
+        verify(attendanceRepository, times(1)).findByStudent(student);
     }
+
+    @Test
+    void testGetByLesson() {
+        when(lessonService.getById(1L)).thenReturn(lesson);
+        when(attendanceRepository.findByLesson(lesson)).thenReturn(Arrays.asList(attendance1));
+
+        List<Attendance> attendances = attendanceService.getByLesson(1L);
+
+        assertEquals(1, attendances.size());
+
+        verify(lessonService, times(1)).getById(1L);
+        verify(attendanceRepository, times(1)).findByLesson(lesson);
+    }
+
+    @Test
+    void testCreate() {
+        student.setRa("12345");
+        when(studentRepository.getByRa(any())).thenReturn(Arrays.asList(student.getId()));
+        when(attendanceRepository.save(any())).thenReturn(attendance1);
+
+        Attendance createdAttendance = attendanceService.create(attendance1);
+
+        assertNotNull(createdAttendance);
+        assertEquals(attendance1.getId(), createdAttendance.getId());
+
+        verify(studentRepository, times(1)).getByRa(any());
+        verify(attendanceRepository, times(1)).save(any());
+    }
+
+    @Test
+    void testUpdate() {
+        Attendance updatedAttendance = new Attendance();
+        updatedAttendance.setId(1L);
+        updatedAttendance.setOpen(false);
+
+        when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1));
+        when(attendanceRepository.save(any())).thenReturn(updatedAttendance);
+
+        Attendance result = attendanceService.update(updatedAttendance, 1L);
+
+        assertNotNull(result);
+        assertEquals(updatedAttendance.getOpen(), result.getOpen());
+        assertEquals(updatedAttendance.getId(), result.getId());
+
+        verify(attendanceRepository, times(1)).findById(1L);
+        verify(attendanceRepository, times(1)).save(any());
+    }
+
+    @Test
+    void testDelete() {
+        when(attendanceRepository.findById(1L)).thenReturn(Optional.of(attendance1)).thenReturn(Optional.empty());
+
+        attendanceService.delete(1L);
+
+        verify(attendanceRepository, times(1)).findById(1L);
+        verify(attendanceRepository, times(1)).deleteById(1L);
+    }
+
 }

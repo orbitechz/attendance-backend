@@ -43,8 +43,8 @@ public class LessonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Lesson> updateLesson(@Validated @RequestBody Lesson lesson,@PathVariable Long id) {
-        return ResponseEntity.ok(service.update(lesson, id));
+    public ResponseEntity<Lesson> updateLesson(Principal principal, @Validated @RequestBody Lesson lesson,@PathVariable Long id) {
+        return ResponseEntity.ok(service.update(lesson, id, principal));
     }
 
     @PutMapping("/close/{id}")
