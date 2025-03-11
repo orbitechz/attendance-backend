@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +24,9 @@ class AttendanceControllerTest {
 
     @InjectMocks
     private AttendanceController controller;
+
+    @Mock
+    private Principal principal;
 
     @BeforeEach
     void setUp() {
@@ -89,13 +93,13 @@ class AttendanceControllerTest {
     @Test
     void testCreateAttendance() {
         Attendance attendance = new Attendance();
-        when(service.create(attendance)).thenReturn(attendance);
+        when(service.create(attendance, principal)).thenReturn(attendance);
 
-        ResponseEntity<Attendance> response = controller.createAttendance(attendance);
+        ResponseEntity<Attendance> response = controller.createAttendance(principal, attendance);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertEquals(attendance, response.getBody());
-        verify(service, times(1)).create(attendance);
+        verify(service, times(1)).create(attendance, principal);
     }
 
     @Test
