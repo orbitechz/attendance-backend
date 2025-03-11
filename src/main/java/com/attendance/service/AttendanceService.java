@@ -3,12 +3,15 @@ package com.attendance.service;
 import com.attendance.entity.Attendance;
 import com.attendance.entity.Lesson;
 import com.attendance.entity.Student;
+import com.attendance.entity.User;
 import com.attendance.repository.AttendanceRepository;
 import com.attendance.repository.StudentRepository;
+import com.attendance.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,6 +27,9 @@ public class AttendanceService {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private LessonService lessonService;
@@ -46,10 +52,13 @@ public class AttendanceService {
         return repository.findByLesson(lesson);
     }
 
-    public Attendance create(Attendance attendance) {
+    public Attendance create(Attendance attendance, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName()).orElse(null);
+
+
         if (attendance.getStudent() != null && attendance.getStudent().getRa() != null) {
-            Optional<Long> studentId = studentRepository.getByRa(attendance.getStudent().getRa()).stream().findFirst();
-            studentId.ifPresent(id -> attendance.getStudent().setId(id));
+            Optional<Student> student = studentRepository.findById(user.getId());
+            student.ifPresent(id -> attendance.setStudent(student.orElse(null)));
         }
         return repository.save(attendance);
     }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -41,8 +42,8 @@ public class AttendanceController {
 
 
     @PostMapping
-    public ResponseEntity<Attendance> createAttendance(@RequestBody Attendance attendance) {
-        return ResponseEntity.ok(service.create(attendance));
+    public ResponseEntity<Attendance> createAttendance(Principal principal, @RequestBody Attendance attendance) {
+        return ResponseEntity.ok(service.create(attendance, principal));
     }
 
     @PutMapping("/{id}")
